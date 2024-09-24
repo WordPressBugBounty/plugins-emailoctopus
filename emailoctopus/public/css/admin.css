@@ -1,0 +1,193 @@
+/**
+ * General admin styles.
+ */
+@keyframes emailoctopus__fadein {
+    0%   { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes emailoctopus__fadeout {
+    0%   { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.emailoctopus-fade-in {
+    animation-name: emailoctopus__fadein;
+    animation-duration: 2s;
+    animation-delay: 0s;
+    display: block;
+    opacity: 1;
+}
+
+.emailoctopus-fade-out {
+    animation-name: emailoctopus__fadeout;
+    animation-duration: 2s;
+    animation-delay: 0s;
+    display: none;
+    opacity: 0;
+}
+
+input[type=text].emailoctopus-invalid {
+    border: 1px solid #dc3232;
+    background-color: #e9c7c7;
+}
+
+.emailoctopus-notice {
+    margin-left: 0;
+}
+
+/**
+ * Admin Component: Welcome page.
+ */
+.emailoctopus-welcome-container {
+    background-color: #f9fbfa;
+    text-align: center;
+    margin: 200px auto 0 auto
+}
+.emailoctopus-welcome {
+    position: relative;
+    font-family: Lato, Arial, sans-serif;
+    z-index: 1;
+}
+.emailoctopus-welcome h2 {
+    margin-top: 0;
+}
+.emailoctopus-welcome p {
+    padding: 0 50px 20px 50px;
+}
+.emailoctopus-welcome-actions {
+    margin-bottom: 15px;
+}
+.emailoctopus-welcome-actions .button {
+    margin: 0 2px;
+}
+.emailoctopus-welcome-wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 90px;
+    width: 100%;
+    fill: #e8f5f2;
+}
+
+/**
+ * Admin Page: Settings.
+ */
+.emailoctopus-api-key-status {
+    display: inline-block;
+    text-transform: uppercase;
+    color: #fff;
+    padding: 5px;
+    font-weight: 700;
+    margin-right: 10px;
+}
+
+.emailoctopus-api-key-status.emailoctopus-api-key-connected {
+    background: #9caa38;
+}
+
+.emailoctopus-api-key-status.emailoctopus-api-key-not-connected {
+    background: #ed3333;
+}
+
+.emailoctopus-api-key-status a,
+.emailoctopus-api-key-status a:hover,
+.emailoctopus-api-key-status a:visited {
+    color: #fff;
+    text-decoration: none;
+}
+
+.emailoctopus__logo img {
+    margin: 0 8px -2px 0;
+}
+
+/**
+ * Admin Page: Forms.
+ */
+.emailoctopus-forms-table-message div {
+    display: flex;
+    justify-content: center;
+    padding: 1em;
+}
+
+.emailoctopus-forms-refresh {
+    float: right;
+    top: 5px !important;
+}
+
+@media (min-width: 782px) {
+    .emailoctopus-forms-refresh {
+        top: 12px !important;
+    }
+}
+
+.emailoctopus-form-row img {
+    float: left;
+    padding-right: 20px;
+}
+
+.emailoctopus-form-row > td > div {
+    padding-top: 25px;
+}
+
+.emailoctopus-form-name {
+    display: flex;
+    align-items: center;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+}
+
+.emailoctopus-form-overview {
+    display: flex;
+}
+
+.emailoctopus-form-overview img {
+    margin-right: 14px;
+}
+
+#emailoctopus-forms th:nth-of-type(2) {
+    min-width: 0;
+}
+
+#emailoctopus-forms th:nth-of-type(3) {
+    min-width: 0;
+}
+
+@media (min-width: 500px) {
+    #emailoctopus-forms th:nth-of-type(2) {
+        min-width: 15ch;
+    }
+
+    #emailoctopus-forms th:nth-of-type(3) {
+        min-width: 15ch;
+    }
+}
+
+@media (min-width: 782px) {
+    #emailoctopus-forms th:nth-of-type(2) {
+        min-width: 25ch;
+    }
+
+    #emailoctopus-forms th:nth-of-type(3) {
+        min-width: 25ch;
+    }
+}
+
+
+/**
+ * Admin Page: Single Form Display Settings.
+ */
+.emailoctopus-form-shortcode {
+    margin-top: 10px;
+    user-select: all;
+}
+
+#emailoctopus-form-post-types-container {
+    display: none;
+    margin-top: 10px;
+    padding-left: 1px;
+}
+
+#emailoctopus-form-post-types div {
+    margin: 5px 0 0 0;
+}

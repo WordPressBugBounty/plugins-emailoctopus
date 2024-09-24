@@ -1,0 +1,209 @@
+:root {
+    --color-light: #575757;
+    --color-dark: #eee;
+    --color-green: green;
+    --color-red: #e74c3c;
+    --background-light: #fff;
+    --background-dark: #000;
+    --padding-light: 20px;
+    --padding-dark: 20px;
+}
+
+@keyframes emailoctopus-fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0.8;
+    }
+}
+
+@keyframes emailoctopus-fade-out {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.emailoctopus-form-wrapper {
+    padding: 20px;
+}
+
+.emailoctopus__success-message,
+.emailoctopus__error-message {
+    display: none;
+    opacity: 0;
+    background: var(--background-light);
+    padding: 10px;
+    font-weight: 700;
+    border-radius: 5px;
+}
+
+.emailoctopus__success-message p,
+.emailoctopus__error-message p {
+    font-weight: 700;
+}
+
+.emailoctopus-form-row {
+    margin-bottom: 15px;
+}
+
+.emailoctopus-label {
+    display: inline-block;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.emailoctopus-label ~ input {
+    width: 100%;
+    background: var(--background-light);
+    color: var(--background-dark);
+    padding: 10px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.emailoctopus-label > br {
+    display: none;
+}
+
+.emailoctopus-form-copy-wrapper > br {
+    display: none; /* For WordPress 5.0 */
+}
+
+.emailoctopus-form-row-hp {
+    position: absolute;
+    left: -5000px;
+}
+
+.emailoctopus-form-row-subscribe {
+    margin-top: 20px;
+}
+
+.emailoctopus-form-row-subscribe button {
+    padding: 5px 10px;
+}
+
+.emailoctopus-fade-in {
+    animation-name: emailoctopus-fade-in;
+    animation-duration: 1s;
+    animation-delay: 0s;
+    display: block;
+    opacity: 1;
+}
+
+.emailoctopus-fade-out {
+    animation-name: emailoctopus-fade-out;
+    animation-duration: 2s;
+    animation-delay: 0s;
+    display: none;
+    opacity: 0;
+}
+
+.emailoctopus-form-textarea-hidden {
+    display: none;
+}
+
+.emailoctopus__success-message {
+    color: var(--color-green);
+    margin: 0;
+}
+
+.emailoctopus__error-message {
+    color: var(--color-red);
+    margin: 0;
+}
+
+.emailoctopus__success-message p,
+.emailoctopus__error-message p {
+    margin: 0;
+}
+
+.emailoctopus__success-message br,
+.emailoctopus__error-message br {
+    display: none;
+}
+
+.emailoctopus-form-wrapper .required {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    color: var(--color-red);
+    top: 3px;
+}
+
+.emailoctopus-referral {
+    margin-top: 15px;
+}
+
+.emailoctopus-form-wrapper h1,
+.emailoctopus-form-wrapper h2,
+.emailoctopus-form-wrapper h3,
+.emailoctopus-form-wrapper h4,
+.emailoctopus-form-wrapper h5,
+.emailoctopus-form-wrapper h6 {
+    margin-top: 0 !important;
+    color: inherit !important;
+}
+
+/* Light theme. */
+.emailoctopus-theme-light {
+    border-radius: 5px;
+    color: var(--color-light);
+    padding: var(--padding-light);
+    background: var(--background-light);
+}
+
+.emailoctopus-theme-light label {
+    color: var(--color-light);
+}
+
+.emailoctopus-theme-light input {
+    background: var(--background-light) !important;
+    border: 1px solid #757575 !important;
+}
+
+/* Dark theme. */
+.emailoctopus-theme-dark {
+    border-radius: 5px;
+    color: var(--color-dark);
+    padding: var(--padding-dark);
+    background: var(--background-dark);
+}
+
+.emailoctopus-theme-dark a {
+    color: var(--color-dark);
+}
+
+.emailoctopus-theme-dark label {
+    color: var(--color-dark);
+}
+
+.emailoctopus-theme-dark input {
+    color: var(--color-dark) !important;
+    background: var(--background-dark) !important;
+    border: 1px solid var(--color-dark) !important;
+}
+
+.emailoctopus-theme-dark input::placeholder {
+    color: var(--color-light) !important;
+}
+
+.emailoctopus-theme-dark button {
+    background-color: var(--background-light) !important;
+    color: var(--background-dark);
+}
+
+/* Widgets. */
+.emailoctopus-email-widget h2 {
+    padding: 10px 0;
+    font-weight: 700;
+}
+
+/* Custom colors. */
+.emailoctopus-custom-colors {
+    padding: 20px;
+}

@@ -1,0 +1,63 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 2,
+    "name": "emailoctopus/form",
+    "title": "EmailOctopus Legacy Form",
+    "category": "emailoctopus",
+    "version": "2.2.2",
+    "textdomain": "emailoctopus",
+    "attributes": {
+        "form_id": {
+            "type": "integer",
+            "default": 0
+        },
+        "show_title": {
+            "type": "boolean",
+            "default": true
+        },
+        "show_description": {
+            "type": "boolean",
+            "default": true
+        },
+        "branding": {
+            "type": "boolean",
+            "default": true
+        },
+        "consent_checkbox": {
+            "type": "boolean",
+            "default": false
+        },
+        "appearance": {
+            "type": "string",
+            "default": "default"
+        },
+        "background_color": {
+            "type": "string",
+            "default": "#ebebeb"
+        },
+        "text_color": {
+            "type": "string",
+            "default": "#000000"
+        },
+        "button_color": {
+            "type": "string",
+            "default": "inherit"
+        },
+        "button_text_color": {
+            "type": "string",
+            "default": "#000000"
+        },
+        "override_appearance": {
+            "type": "boolean",
+            "default": false
+        },
+        "override_consent": {
+            "type": "boolean",
+            "default": false
+        },
+        "override_branding": {
+            "type": "boolean",
+            "default": false
+        }
+    }
+}

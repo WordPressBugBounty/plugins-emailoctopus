@@ -1,0 +1,22 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 2,
+    "name": "emailoctopus/form-block",
+    "title": "EmailOctopus Form",
+    "description": "Add an EmailOctopus Form.",
+    "category": "emailoctopus",
+    "version": "3.1.6",
+    "textdomain": "emailoctopus",
+    "keywords": ["emailoctopus", "email octopus", "form"],
+    "supports": {
+        "html": false,
+        "customClassName": false
+    },
+    "attributes": {
+        "form_id": {
+            "type": "string"
+        }
+    },
+    "editorScript": "emailoctopus-form",
+    "editorStyle": "emailoctopus-form"
+}
