@@ -1,4 +1,4 @@
-# Copyright (C) 2023 EmailOctopus
+# Copyright (C) 2024 EmailOctopus
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
@@ -9,13 +9,14 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-12-12T12:27:50+00:00\n"
+"POT-Creation-Date: 2024-11-01T12:50:24+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.9.0\n"
+"X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: emailoctopus\n"
 
 #. Plugin Name of the plugin
 #. Author of the plugin
+#: emailoctopus.php
 #: src/Admin.php:153
 #: src/Admin.php:154
 #: src/Gutenberg.php:50
@@ -24,10 +25,12 @@ msgstr ""
 
 #. Plugin URI of the plugin
 #. Author URI of the plugin
+#: emailoctopus.php
 msgid "https://emailoctopus.com"
 msgstr ""
 
 #. Description of the plugin
+#: emailoctopus.php
 msgid "Use this official plugin to display EmailOctopus subscription forms on your WordPress site."
 msgstr ""
 
@@ -393,34 +396,41 @@ msgstr ""
 msgid "Widgets have been deprecated in the EmailOctopus plugin. Please delete this widget and add forms to widget areas via shortcodes."
 msgstr ""
 
+#: public/build/block.js:1
 #: src/js/block-preview.js:50
 msgid "A server error occurred."
 msgstr ""
 
+#: public/build/block.js:1
 #: src/js/block-preview.js:93
 msgid "EmailOctopus Form Preview"
 msgstr ""
 
+#: public/build/json/block.json
 #: src/json/block.json
 msgctxt "block title"
 msgid "EmailOctopus Form"
 msgstr ""
 
+#: public/build/json/block.json
 #: src/json/block.json
 msgctxt "block description"
 msgid "Add an EmailOctopus Form."
 msgstr ""
 
+#: public/build/json/block.json
 #: src/json/block.json
 msgctxt "block keyword"
 msgid "emailoctopus"
 msgstr ""
 
+#: public/build/json/block.json
 #: src/json/block.json
 msgctxt "block keyword"
 msgid "email octopus"
 msgstr ""
 
+#: public/build/json/block.json
 #: src/json/block.json
 msgctxt "block keyword"
 msgid "form"
