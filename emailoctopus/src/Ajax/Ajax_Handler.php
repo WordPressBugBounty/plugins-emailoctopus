@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Generic structure for EmailOctopus plugin AJAX request handlers.
  */

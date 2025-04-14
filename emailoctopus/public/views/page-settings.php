@@ -91,7 +91,7 @@ endif;
                     />
                     <p>
                         <?php // Translators: %s: <a> tags for EmailOctopus API documentation page link. ?>
-                        <?php printf( __( 'Your %1$sEmailOctopus API key%2$s, used to connect to your account.', 'emailoctopus' ), '<a href="https://emailoctopus.com/api-documentation" target="_blank" rel="noopener">', '</a>' ); ?>
+                        <?php printf( __( 'Your %1$sEmailOctopus API key%2$s, used to connect to your account.', 'emailoctopus' ), '<a href="https://emailoctopus.com/developer/api-keys" target="_blank" rel="noopener">', '</a>' ); ?>
                     </p>
                 </td>
             </tr>
