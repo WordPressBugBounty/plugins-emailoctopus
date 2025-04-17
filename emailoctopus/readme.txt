@@ -3,7 +3,7 @@
 Contributors: EmailOctopus
 Tags: email marketing, collect emails, emailoctopus, emailoctopus form, emailoctopus plugin, email, email octopus, email form, marketing, newsletter, signup form, subscribers, subscription, widget, email plugin, list builder, amazon ses
 Requires at least: 5.0
-Tested up to: 6.7
+Tested up to: 6.8
 Stable tag: 3.1.7
 Requires PHP: 7.4
 License: GPLv2 or later

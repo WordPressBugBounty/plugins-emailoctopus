@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-04-14T08:18:59+00:00\n"
+"POT-Creation-Date: 2025-04-14T14:28:28+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: emailoctopus\n"
@@ -396,41 +396,34 @@ msgstr ""
 msgid "Widgets have been deprecated in the EmailOctopus plugin. Please delete this widget and add forms to widget areas via shortcodes."
 msgstr ""
 
-#: public/build/block.js:1
 #: src/js/block-preview.js:50
 msgid "A server error occurred."
 msgstr ""
 
-#: public/build/block.js:1
 #: src/js/block-preview.js:93
 msgid "EmailOctopus Form Preview"
 msgstr ""
 
-#: public/build/json/block.json
 #: src/json/block.json
 msgctxt "block title"
 msgid "EmailOctopus Form"
 msgstr ""
 
-#: public/build/json/block.json
 #: src/json/block.json
 msgctxt "block description"
 msgid "Add an EmailOctopus Form."
 msgstr ""
 
-#: public/build/json/block.json
 #: src/json/block.json
 msgctxt "block keyword"
 msgid "emailoctopus"
 msgstr ""
 
-#: public/build/json/block.json
 #: src/json/block.json
 msgctxt "block keyword"
 msgid "email octopus"
 msgstr ""
 
-#: public/build/json/block.json
 #: src/json/block.json
 msgctxt "block keyword"
 msgid "form"
