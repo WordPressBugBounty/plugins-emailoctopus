@@ -1,3 +1,7 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
 
 <div class="emailoctopus-welcome-container card">
     <div class="emailoctopus-welcome">
@@ -22,7 +26,4 @@
             </a>
         </div>
     </div>
-    <svg class="emailoctopus-welcome-wave" preserveAspectRatio="none" viewBox="0 0 1366 73" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M158.5 0C417.5 0 635.5 59.5 889.5 59.5C1090.05 59.5 1288.6 42.2904 1366 33.3495V73H0V7.5C44.5897 2.48657 98.3282 0 158.5 0Z"></path>
-    </svg>
 </div>

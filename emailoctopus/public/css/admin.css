@@ -40,26 +40,37 @@ input[type=text].emailoctopus-invalid {
  * Admin Component: Welcome page.
  */
 .emailoctopus-welcome-container {
-    background-color: #f9fbfa;
+    background-color: #f9f6fe;
     text-align: center;
     margin: 200px auto 0 auto
+}
+.emailoctopus-welcome-container.card {
+    padding-top: 13px;
+    padding-bottom: 13px;
 }
 .emailoctopus-welcome {
     position: relative;
     font-family: Lato, Arial, sans-serif;
+    color: #0c0c0d;
     z-index: 1;
+    padding: 30px;
 }
 .emailoctopus-welcome h2 {
-    margin-top: 0;
+    margin-top: 10px;
 }
 .emailoctopus-welcome p {
     padding: 0 50px 20px 50px;
 }
-.emailoctopus-welcome-actions {
-    margin-bottom: 15px;
-}
 .emailoctopus-welcome-actions .button {
     margin: 0 2px;
+    background-color: #2b0642;
+    border: 0;
+    border-radius: 60px;
+}
+.emailoctopus-welcome-actions .button:hover {
+    margin: 0 2px;
+    background-color: #6f54d7;
+    border: 0;
 }
 .emailoctopus-welcome-wave {
     position: absolute;
