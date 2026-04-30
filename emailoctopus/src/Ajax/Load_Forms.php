@@ -15,6 +15,7 @@ class Load_Forms extends Ajax_Handler
      */
     public function process_request(): void
     {
+        parent::validate_capability();
         parent::validate_nonce();
 
         $data = Utils::get_forms();

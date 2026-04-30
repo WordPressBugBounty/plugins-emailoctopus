@@ -12,10 +12,11 @@ class Update_Settings extends Ajax_Handler
 
     public function process_request(): void
     {
+        parent::validate_capability();
         parent::validate_nonce();
 
         $current_api_key = get_option('emailoctopus_api_key');
-        $new_api_key = $_REQUEST['api_key'];
+        $new_api_key = sanitize_text_field(wp_unslash($_REQUEST['api_key'] ?? ''));
         $is_valid_api_key = Utils::is_valid_api_key($new_api_key, true);
 
         if (

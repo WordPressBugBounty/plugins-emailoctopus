@@ -50,6 +50,19 @@ abstract class Ajax_Handler
     }
 
     /**
+     * Verifies the current user has permission to access admin AJAX functionality.
+     */
+    protected function validate_capability(): void
+    {
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(
+                ['message' => esc_html__('You are not allowed to perform this action.', 'emailoctopus')],
+                403
+            );
+        }
+    }
+
+    /**
      * Main entry point for the AJAX request; processes that request and responds accordingly.
      */
     abstract public function process_request(): void;

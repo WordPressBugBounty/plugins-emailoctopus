@@ -59,20 +59,28 @@ wp_enqueue_script( 'emailoctopus_page_form' );
 
         <?php
             $form = new Form( $form_id );
+            $form_url_id = rawurlencode( $form->get_id() );
+            $list_url_id = rawurlencode( $form->get_list_id() );
+            $form_template_url = sprintf( 'https://emailoctopus.com/forms/embedded/%s/template', $form_url_id );
+            $form_design_url = sprintf( 'https://emailoctopus.com/forms/embedded/%s/design', $form_url_id );
+            $list_url = sprintf( 'https://emailoctopus.com/lists/%s', $list_url_id );
 
             if ($form->has_errors()):
         ?>
             <div class="emailoctopus-notice notice notice-warning">
                 <p><?php esc_html_e( 'Could not load form. Check this form hasn\'t been deleted and that your internet connection is working.', 'emailoctopus' ); ?></p>
                 <p>
-                    <a href="<?php echo admin_url( 'admin.php?page=emailoctopus-forms' ); ?>">&larr; <?php esc_html_e( 'Back to forms', 'emailoctopus' ); ?></a>
+                    <a href="<?php echo esc_url( admin_url( 'admin.php?page=emailoctopus-forms' ) ); ?>">&larr; <?php esc_html_e( 'Back to forms', 'emailoctopus' ); ?></a>
                 </p>
             </div>
         <?php elseif (!$form->get_script_url()): ?>
             <div class="emailoctopus-notice notice notice-warning">
-                <p><?php echo __( '<a href="https://emailoctopus.com/forms/embedded/' . $form->get_id() . '/template" target="_blank" rel="nofollow">Finish designing your form</a> to configure its display settings.', 'emailoctopus' ); ?></p>
                 <p>
-                    <a href="<?php echo admin_url( 'admin.php?page=emailoctopus-forms' ); ?>">&larr; <?php esc_html_e( 'Back to forms', 'emailoctopus' ); ?></a>
+                    <a href="<?php echo esc_url( $form_template_url ); ?>" target="_blank" rel="nofollow"><?php esc_html_e( 'Finish designing your form', 'emailoctopus' ); ?></a>
+                    <?php esc_html_e( 'to configure its display settings.', 'emailoctopus' ); ?>
+                </p>
+                <p>
+                    <a href="<?php echo esc_url( admin_url( 'admin.php?page=emailoctopus-forms' ) ); ?>">&larr; <?php esc_html_e( 'Back to forms', 'emailoctopus' ); ?></a>
                 </p>
             </div>
         <?php else: ?>
@@ -87,7 +95,7 @@ wp_enqueue_script( 'emailoctopus_page_form' );
                             </th>
                             <td>
                                 <p>
-                                    <a href="https://emailoctopus.com/forms/embedded/<?php echo $form->get_id() ?>/design" target="_blank" rel="noopener">
+                                    <a href="<?php echo esc_url( $form_design_url ); ?>" target="_blank" rel="noopener">
                                         <?php !empty($form->get_name()) ? esc_html_e($form->get_name()) : esc_html_e('Untitled', 'emailoctopus'); ?>
                                         (<?php
                                             switch ($form->get_type()) {
@@ -111,8 +119,8 @@ wp_enqueue_script( 'emailoctopus_page_form' );
                                         ?>)
                                     </a>
                                 </p><br>
-                                <img src="<?php echo $form->get_screenshot_url(); ?>"
-                                    alt="Screenshot of <?php esc_html_e($form->get_name());?>"
+                                <img src="<?php echo esc_url( $form->get_screenshot_url() ); ?>"
+                                    alt="<?php echo esc_attr( sprintf( __( 'Screenshot of %s', 'emailoctopus' ), $form->get_name() ) ); ?>"
                                     tabindex="-1"
                                     width="120"
                                     height="120"
@@ -123,7 +131,7 @@ wp_enqueue_script( 'emailoctopus_page_form' );
                         <tr>
                             <th scope="row"><?php esc_html_e( 'List', 'emailoctopus' ); ?></th>
                             <td>
-                                <a href="https://emailoctopus.com/lists/<?php echo $form->get_list_id() ?>" target="_blank" rel="noopener">
+                                <a href="<?php echo esc_url( $list_url ); ?>" target="_blank" rel="noopener">
                                     <?php !empty($form->get_list_name()) ? esc_html_e($form->get_list_name()) : esc_html_e('Untitled', 'emailoctopus'); ?>
                                 </a>
                             </td>
@@ -172,7 +180,7 @@ wp_enqueue_script( 'emailoctopus_page_form' );
                                     <fieldset id="emailoctopus-form-post-types">
                                         <legend class="screen-reader-text"><?php esc_html_e( 'Post Types', 'emailoctopus' ); ?></legend>
 
-                                        <?php $post_types = maybe_unserialize( $form->get_form_post()->_emailoctopus_form_post_types ); ?>
+                                        <?php $post_types = (array) $form->get_form_post()->_emailoctopus_form_post_types; ?>
 
                                         <?php foreach ( Utils::get_displayable_post_types() as $i => $post_type ) : ?>
                                             <div>

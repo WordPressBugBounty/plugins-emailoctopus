@@ -15,18 +15,16 @@ $utils         = new Utils();
 $api_key       = get_option( 'emailoctopus_api_key', false );
 $api_key_valid = $utils->is_valid_api_key( $api_key );
 
-$api_refresh_url = add_query_arg(
-    [
-        'emailoctopus_api_refresh' => wp_create_nonce( 'emailoctopus-api-refresh' )
-    ],
-    admin_url( 'admin.php?page=emailoctopus-forms' )
-);
-
 wp_enqueue_script( 'emailoctopus_page_forms' );
 
 wp_nonce_field( 'emailoctopus_load_forms', '_eo_nonce' );
 
 ?>
+
+<form id="emailoctopus-api-refresh-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+    <input type="hidden" name="action" value="emailoctopus_api_refresh">
+    <?php wp_nonce_field( 'emailoctopus-api-refresh', '_emailoctopus_api_nonce' ); ?>
+</form>
 
 <?php
 $api_refresh_status = get_transient('emailoctopus_api_refresh_status' );
@@ -35,14 +33,9 @@ if ( $api_refresh_status === '-1' ) :
     <div class="emailoctopus-notice notice notice-error is-dismissible">
         <p>
             <?php
-            echo __(
-                sprintf(
-                    'Could not refresh data. Please <a href="%s">try again</a>.',
-                    esc_url( $api_refresh_url )
-                ),
-                'emailoctopus'
-            );
+            esc_html_e( 'Could not refresh data. Please try again.', 'emailoctopus' );
             ?>
+            <button type="submit" class="button-link" form="emailoctopus-api-refresh-form"><?php esc_html_e( 'Try again', 'emailoctopus' ); ?></button>
         </p>
     </div>
 <?php
@@ -73,7 +66,7 @@ endif;
 
         <a class="page-title-action" href="https://emailoctopus.com/forms/embedded/list" target="_blank" rel="noopener"><?php esc_html_e( 'Add New', 'emailoctopus' ); ?></a>
 
-        <a class="page-title-action emailoctopus-forms-refresh" href="<?php echo esc_url( $api_refresh_url ); ?>"><?php esc_html_e( 'Refresh Data', 'emailoctopus' ); ?></a>
+        <button type="submit" class="page-title-action emailoctopus-forms-refresh" form="emailoctopus-api-refresh-form"><?php esc_html_e( 'Refresh Data', 'emailoctopus' ); ?></button>
 
         <hr class="wp-header-end"/>
 

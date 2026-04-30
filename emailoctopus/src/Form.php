@@ -184,8 +184,8 @@ class Form
     {
         return sprintf(
             '<script async src="%s" data-form="%s"></script>',
-            $this->get_script_url(),
-            $this->get_id()
+            esc_url($this->get_script_url()),
+            esc_attr($this->get_id())
         );
     }
 

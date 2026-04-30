@@ -142,10 +142,22 @@ class Gutenberg
     {
         $form_id = '';
         if (isset($attributes['form_id'])) {
-            $form_id = $attributes['form_id'];
+            $form_id = (string) $attributes['form_id'];
         }
 
-        return do_shortcode('[emailoctopus form_id="' . $form_id . '"]');
+        if ('' !== $form_id && !$this->is_valid_form_id($form_id)) {
+            return '';
+        }
+
+        return do_shortcode('[emailoctopus form_id="' . esc_attr($form_id) . '"]');
+    }
+
+    /**
+     * Confirms a form ID is safe for use in a shortcode attribute.
+     */
+    private function is_valid_form_id(string $form_id): bool
+    {
+        return 1 === preg_match('/^[A-Za-z0-9-]+$/', $form_id);
     }
 
     /**
@@ -207,6 +219,13 @@ class Gutenberg
             'permission_callback' => function () {
                 return current_user_can('edit_posts');
             },
+            'args' => [
+                'shortcode' => [
+                    'required' => true,
+                    'type' => 'string',
+                    'validate_callback' => [$this, 'is_emailoctopus_shortcode'],
+                ],
+            ],
         ];
         register_rest_route($this->rest_api_namespace, $route, $route_params);
     }
@@ -220,10 +239,33 @@ class Gutenberg
      */
     public function preview_shortcode_callback(WP_REST_Request $request): array
     {
+        $shortcode = (string) $request->get_param('shortcode');
+
         return [
-            'js' => do_shortcode($request->get_param('shortcode')),
+            'js' => $this->is_emailoctopus_shortcode($shortcode) ? do_shortcode($shortcode) : '',
             'html' => '',
             'style' => '<style>.grecaptcha-badge {display: none!important;}</style>',
         ];
+    }
+
+    /**
+     * Confirms the preview request contains one EmailOctopus shortcode only.
+     */
+    public function is_emailoctopus_shortcode($shortcode): bool
+    {
+        if (!is_string($shortcode)) {
+            return false;
+        }
+
+        $shortcode = trim($shortcode);
+        if ('' === $shortcode) {
+            return false;
+        }
+
+        if (1 !== preg_match('/^' . get_shortcode_regex(['emailoctopus']) . '$/s', $shortcode, $matches)) {
+            return false;
+        }
+
+        return '' === $matches[1] && '' === $matches[5] && '' === $matches[6];
     }
 }

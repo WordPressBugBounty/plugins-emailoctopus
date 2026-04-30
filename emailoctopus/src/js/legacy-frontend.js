@@ -50,6 +50,7 @@ jQuery( document ).ready( function ( $ ) {
             url: emailoctopus.ajaxurl,
             data: {
                 action: 'submit_frontend_form',
+                _eo_nonce: emailoctopus.nonce,
                 form_data: form_options,
                 list_id: list_id
             },

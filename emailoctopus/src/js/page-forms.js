@@ -5,7 +5,29 @@
     function escapeHtml(possibleHtml) {
         // Uses the browser's built-in ability to escape HTML by
         // putting the text inside an <option> element.
-        return new Option(possibleHtml).innerHTML;
+        return new window.Option(possibleHtml === null || typeof possibleHtml === 'undefined' ? '' : possibleHtml).innerHTML;
+    }
+
+    function encodeUrlPathSegment(possibleSegment) {
+        return encodeURIComponent(possibleSegment === null || typeof possibleSegment === 'undefined' ? '' : possibleSegment);
+    }
+
+    function escapeUrl(possibleUrl) {
+        if (possibleUrl === null || typeof possibleUrl === 'undefined' || possibleUrl === '') {
+            return '';
+        }
+
+        try {
+            const url = new URL(possibleUrl, window.location.origin);
+
+            if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+                return '';
+            }
+
+            return escapeHtml(url.href);
+        } catch {
+            return '';
+        }
     }
 
     function translateType(type) {
@@ -74,11 +96,16 @@
                 $formsList.empty();
 
                 $.each( response.data, function ( i, form ) {
-                    const formUrl = `${l10n.formUrlBase}&form-id=${form.id}`
-                    let $form = $( `
-                        <tr data-form-id="${form.id}" class="emailoctopus-form-row">
+                    const formId = encodeUrlPathSegment(form.id);
+                    const listId = encodeUrlPathSegment(form.list_id);
+                    const formUrl = `${l10n.formUrlBase}&form-id=${formId}`;
+                    const formDesignUrl = `https://emailoctopus.com/forms/embedded/${formId}/design`;
+                    const listUrl = `https://emailoctopus.com/lists/${listId}`;
+                    const screenshotUrl = escapeUrl(form.screenshot_url);
+                    const $form = $( `
+                        <tr data-form-id="${escapeHtml(form.id)}" class="emailoctopus-form-row">
                             <td class="emailoctopus-form-row-overview">
-                                <img src="${form.screenshot_url}"
+                                <img src="${screenshotUrl}"
                                     alt="Screenshot of ${escapeHtml(form.name)} form"
                                     tabindex="-1"
                                     width="90"
@@ -89,14 +116,14 @@
                                     <div class="row-actions">
                                         <span class="edit">
                                             <a href="${formUrl}" aria-label="Edit ${escapeHtml(form.name)} form">Display settings</a> |
-                                            <a href="https://emailoctopus.com/forms/embedded/${form.id}/design" target="_blank" rel="noopener" aria-label="View on EmailOctopus">View on EmailOctopus</a>
+                                            <a href="${formDesignUrl}" target="_blank" rel="noopener" aria-label="View on EmailOctopus">View on EmailOctopus</a>
                                         </span>
                                     </div>
                                 </div>
                             </td>
                             <td>
                                 <div>
-                                    <a href="https://emailoctopus.com/lists/${form.list_id}" target="_blank" rel="noopener">
+                                    <a href="${listUrl}" target="_blank" rel="noopener">
                                         ${form.list_name ? escapeHtml(form.list_name) : l10n.formsUntitled }
                                     </a>
                                 </div>

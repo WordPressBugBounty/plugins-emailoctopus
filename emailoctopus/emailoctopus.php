@@ -3,7 +3,7 @@
  * Plugin Name:       EmailOctopus
  * Plugin URI:        https://emailoctopus.com
  * Description:       Use this official plugin to display EmailOctopus subscription forms on your WordPress site.
- * Version:           3.1.8
+ * Version:           3.1.9
  * Author:            EmailOctopus
  * Author URI:        https://emailoctopus.com
  * Text Domain:       emailoctopus
@@ -25,7 +25,7 @@ if ( version_compare( PHP_VERSION, '7.4', '<' ) ) {
     wp_die( esc_html__( 'EmailOctopus requires PHP version 7.4 or higher.', 'emailoctopus' ) );
 }
 
-define( 'EMAILOCTOPUS_VERSION', '3.1.8' );
+define( 'EMAILOCTOPUS_VERSION', '3.1.9' );
 define( 'EMAILOCTOPUS_FILE', __FILE__ );
 define( 'EMAILOCTOPUS_DIR', plugin_dir_path( EMAILOCTOPUS_FILE ) );
 define( 'EMAILOCTOPUS_URL', plugin_dir_url( EMAILOCTOPUS_FILE ) );

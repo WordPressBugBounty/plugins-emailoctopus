@@ -15,14 +15,6 @@ $utils         = new Utils();
 $api_key       = get_option( 'emailoctopus_api_key', false );
 $api_key_valid = $utils->is_valid_api_key( $api_key );
 
-// Only available to the user if the API key is actually connected.
-$api_disconnect_url = add_query_arg(
-    [
-        'emailoctopus_api_disconnect' => wp_create_nonce( 'emailoctopus-api-disconnect' )
-    ],
-    admin_url( 'admin.php?page=emailoctopus-settings' )
-);
-
 wp_enqueue_script( 'emailoctopus_page_api_key' );
 
 ?>
@@ -43,19 +35,19 @@ if ($api_disconnect_status === '-1'): ?>
     <div class="emailoctopus-notice notice notice-error is-dismissible">
     <p>
             <?php
-            echo __(
-                sprintf(
-                    'Could not disconnect from the API. <a href="%s">Try again</a>.',
-                    esc_url( $api_disconnect_url )
-                ),
-                'emailoctopus'
-            );
+            esc_html_e( 'Could not disconnect from the API. Please try again.', 'emailoctopus' );
             ?>
+            <button type="submit" class="button-link" form="emailoctopus-api-disconnect-form"><?php esc_html_e( 'Try again', 'emailoctopus' ); ?></button>
         </p>
     </div>
 <?php
 endif;
 ?>
+
+<form id="emailoctopus-api-disconnect-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+    <input type="hidden" name="action" value="emailoctopus_api_disconnect">
+    <?php wp_nonce_field( 'emailoctopus-api-disconnect', '_emailoctopus_api_nonce' ); ?>
+</form>
 
 <form id="api_key_form" method="POST" action="#">
     <?php wp_nonce_field( 'emailoctopus_save_api_key', '_eo_nonce' ); ?>
@@ -69,7 +61,7 @@ endif;
                         <?php esc_html_e( 'Connected', 'emailoctopus' ); ?>
                     </div>
 
-                    <a href="<?php echo esc_url( $api_disconnect_url ); ?>" class="emailoctopus-api-key-disconnect"><?php esc_html_e( 'Disconnect', 'emailoctopus' ); ?></a>
+                    <button type="submit" class="emailoctopus-api-key-disconnect button-link" form="emailoctopus-api-disconnect-form"><?php esc_html_e( 'Disconnect', 'emailoctopus' ); ?></button>
                 </td>
                 <td class="emailoctopus-api-key-status-container-not-connected"<?php echo $api_key_valid ? ' style="display: none;"' : ''; ?>>
                     <div class="emailoctopus-api-key-status emailoctopus-api-key-not-connected">

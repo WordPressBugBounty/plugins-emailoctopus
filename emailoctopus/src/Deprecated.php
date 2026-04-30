@@ -292,15 +292,57 @@ class Deprecated
      */
     public static function handle_ajax_form_submission()
     {
-        $api = sprintf('https://emailoctopus.com/api/1.6/lists/%s/contacts', sanitize_text_field($_POST['list_id']));
-        $form_data = $_POST['form_data'];
+        if (!check_ajax_referer('emailoctopus_submit_frontend_form', '_eo_nonce', false)) {
+            wp_send_json(
+                [
+                    'errors' => true,
+                    'message' => 'message_unknown',
+                ],
+                403
+            );
+            exit;
+        }
+
+        $list_id = sanitize_text_field(wp_unslash($_POST['list_id'] ?? ''));
+
+        if (!self::legacy_list_id_exists($list_id)) {
+            wp_send_json(
+                [
+                    'errors' => true,
+                    'message' => 'message_unknown',
+                ],
+                400
+            );
+            exit;
+        }
+
+        $api = sprintf('https://emailoctopus.com/api/1.6/lists/%s/contacts', rawurlencode($list_id));
+        $form_data = wp_unslash($_POST['form_data'] ?? []);
+
+        if (!is_array($form_data)) {
+            wp_send_json(
+                [
+                    'errors' => true,
+                    'message' => 'message_unknown',
+                ],
+                400
+            );
+            exit;
+        }
+
         $body = ['api_key' => get_option('emailoctopus_api_key')];
         $fields = [];
-        $custom_fields = [];
 
         foreach ($form_data as $index => $data) {
-            if ($data['name'] === 'EmailAddress') {
-                $email = $data['value'];
+            if (!is_array($data)) {
+                continue;
+            }
+
+            $field_name = sanitize_text_field($data['name'] ?? '');
+            $field_value = sanitize_text_field($data['value'] ?? '');
+
+            if ($field_name === 'EmailAddress') {
+                $email = sanitize_email($field_value);
 
                 if (!is_email($email)) {
                     wp_send_json(
@@ -312,14 +354,25 @@ class Deprecated
                     exit;
                 }
 
-                $body['email_address'] = $data['value'];
-            } else {
-                $fields[$data['name']] = $data['value'];
+                $body['email_address'] = $email;
+            } elseif ($field_name !== '') {
+                $fields[$field_name] = $field_value;
             }
         }
 
         if (!empty($fields)) {
             $body['fields'] = $fields;
+        }
+
+        if (empty($body['email_address'])) {
+            wp_send_json(
+                [
+                    'errors' => true,
+                    'message' => 'message_missing_email',
+                ],
+                400
+            );
+            exit;
         }
 
         $response = wp_remote_post($api, ['body' => $body]);
@@ -343,6 +396,26 @@ class Deprecated
                 'message' => 'message_success',
             ]
         );
+    }
+
+    /**
+     * Check the submitted list ID belongs to a legacy form on this site.
+     */
+    private static function legacy_list_id_exists(string $list_id): bool
+    {
+        if (empty($list_id)) {
+            return false;
+        }
+
+        global $wpdb;
+
+        $form_table_name = $wpdb->prefix . 'emailoctopus_forms';
+        $query = $wpdb->prepare(
+            "SELECT COUNT(*) FROM {$form_table_name} WHERE list_id = %s",
+            $list_id
+        );
+
+        return (int) $wpdb->get_var($query) > 0;
     }
 
     /**

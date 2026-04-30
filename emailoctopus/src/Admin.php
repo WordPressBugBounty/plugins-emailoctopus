@@ -22,67 +22,69 @@ class Admin
      */
     public function register_hooks(): void
     {
-        add_action('wp_loaded', [$this, 'listen_for_api_refresh']);
         add_action('admin_menu', [$this, 'add_admin_menu']);
         add_action('admin_enqueue_scripts', [$this, 'register_admin_scripts']);
 
-        add_action('wp_loaded', [$this, 'listen_for_api_refresh']);
-        add_action('wp_loaded', [$this, 'listen_for_api_disconnect']);
-
-        // The action content after `admin_post_` is defined on the "action" hidden input in page-form.php.
+        // The action content after `admin_post_` is defined on the "action" hidden input in the admin views.
+        add_action('admin_post_emailoctopus_api_refresh', [$this, 'handle_api_refresh']);
+        add_action('admin_post_emailoctopus_api_disconnect', [$this, 'handle_api_disconnect']);
         add_action('admin_post_emailoctopus_save_form', [$this, 'handle_save_form']);
     }
 
     /**
-     * Clear the API responses cache if an `emailoctopus_api_refresh` nonce is
-     * present in the URL.
+     * Clear the API responses cache.
      */
-    public function listen_for_api_refresh(): void
+    public function handle_api_refresh(): void
     {
-        if (isset($_GET['emailoctopus_api_refresh'])) {
-            $success = false;
-            if (wp_verify_nonce($_GET['emailoctopus_api_refresh'], 'emailoctopus-api-refresh')) {
-                $success = Utils::clear_transients();
-            }
-
-            set_transient(
-                'emailoctopus_api_refresh_status',
-                $success ? 1 : -1,
-                30
-            );
-
-            wp_redirect(admin_url('admin.php?page=emailoctopus-forms'));
-            exit;
+        if (!current_user_can('manage_options')) {
+            wp_die(__('You are not allowed to refresh EmailOctopus API data.', 'emailoctopus'), 403);
         }
+
+        $nonce = filter_input(INPUT_POST, '_emailoctopus_api_nonce', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $success = !empty($nonce) &&
+            wp_verify_nonce($nonce, 'emailoctopus-api-refresh') &&
+            Utils::clear_transients();
+
+        set_transient(
+            'emailoctopus_api_refresh_status',
+            $success ? 1 : -1,
+            30
+        );
+
+        wp_safe_redirect(admin_url('admin.php?page=emailoctopus-forms'));
+        exit;
     }
 
     /**
-     * Clear the API responses cache if an `emailoctopus_api_disconnect` nonce
-     * is present in the URL.
+     * Disconnect the API key and clear cached API data.
      */
-    public function listen_for_api_disconnect(): void
+    public function handle_api_disconnect(): void
     {
-        if (isset($_GET['emailoctopus_api_disconnect'])) {
-            $success = false;
-            if (wp_verify_nonce($_GET['emailoctopus_api_disconnect'], 'emailoctopus-api-disconnect')) {
-                $delete_api_key_success = delete_option('emailoctopus_api_key');
-                $clear_transients_success = Utils::clear_transients();
-                $delete_automatic_displays_success = Utils::delete_automatic_displays();
-
-                $success = $delete_api_key_success &&
-                    $clear_transients_success &&
-                    $delete_automatic_displays_success;
-            }
-
-            set_transient(
-                'emailoctopus_api_disconnect_status',
-                $success ? 1 : -1,
-                30
-            );
-
-            wp_redirect(admin_url('admin.php?page=emailoctopus-settings'));
-            exit;
+        if (!current_user_can('manage_options')) {
+            wp_die(__('You are not allowed to disconnect EmailOctopus API data.', 'emailoctopus'), 403);
         }
+
+        $nonce = filter_input(INPUT_POST, '_emailoctopus_api_nonce', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $success = false;
+
+        if (!empty($nonce) && wp_verify_nonce($nonce, 'emailoctopus-api-disconnect')) {
+            $delete_api_key_success = delete_option('emailoctopus_api_key');
+            $clear_transients_success = Utils::clear_transients();
+            $delete_automatic_displays_success = Utils::delete_automatic_displays();
+
+            $success = $delete_api_key_success &&
+                $clear_transients_success &&
+                $delete_automatic_displays_success;
+        }
+
+        set_transient(
+            'emailoctopus_api_disconnect_status',
+            $success ? 1 : -1,
+            30
+        );
+
+        wp_safe_redirect(admin_url('admin.php?page=emailoctopus-settings'));
+        exit;
     }
 
     /**
@@ -197,11 +199,15 @@ class Admin
      */
     public function handle_save_form(): void
     {
+        if (!current_user_can('manage_options')) {
+            wp_die(__('You are not allowed to save EmailOctopus form settings.', 'emailoctopus'), 403);
+        }
+
         $nonce = filter_input(INPUT_POST, '_eo_nonce', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $referer = filter_input(INPUT_POST, '_wp_http_referer', FILTER_SANITIZE_URL);
 
         // There is no legitimate reason either of these should be missing, or if either is missing, no legitimate reason to proceed.
-        if (empty($referer) || empty($nonce)) {
+        if (empty($referer) || empty($nonce) || !wp_verify_nonce($nonce, 'emailoctopus_save_form')) {
             wp_safe_redirect(wp_login_url('', true));
             exit;
         }
@@ -231,7 +237,7 @@ class Admin
         }
 
         set_transient('emailoctopus_form_settings_saved_status', true, 30);
-        wp_redirect($referer);
+        wp_safe_redirect($referer);
         exit;
     }
 }

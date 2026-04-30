@@ -54,6 +54,7 @@ class Frontend
             'emailoctopus',
             [
                 'ajaxurl' => admin_url('admin-ajax.php'),
+                'nonce' => wp_create_nonce('emailoctopus_submit_frontend_form'),
                 'sending' => __('Sending', 'emailoctopus'),
             ]
         );
@@ -109,7 +110,7 @@ class Frontend
             $form_posts_matching_post_type = array_filter(
                 $form_posts,
                 function ($form_post) use ($post_type) {
-                    $form_types = (array) maybe_unserialize($form_post->_emailoctopus_form_post_types);
+                    $form_types = (array) $form_post->_emailoctopus_form_post_types;
 
                     return in_array($post_type, $form_types, true);
                 }
