@@ -4,7 +4,7 @@
     "name": "emailoctopus/form",
     "title": "EmailOctopus Legacy Form",
     "category": "emailoctopus",
-    "version": "2.2.2",
+    "version": "3.1.10",
     "textdomain": "emailoctopus",
     "attributes": {
         "form_id": {

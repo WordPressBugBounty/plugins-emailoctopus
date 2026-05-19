@@ -80,18 +80,14 @@ class Widget extends WP_Widget
             $cache = [];
         }
 
-        extract($args, EXTR_SKIP);
+        $widget_id = $this->id;
 
-        if (isset($args['widget_id'])) {
-            $args['widget_id'] = $this->id;
-        }
-
-        if (isset($cache[$args['widget_id']])) {
-            return print $cache[$args['widget_id']];
+        if (isset($cache[$widget_id])) {
+            return print $cache[$widget_id];
         }
 
         $form_id = !empty($instance['form_id']) ? $instance['form_id'] : 0;
-        $widget_output = isset($before_widget) ? $before_widget : false;
+        $widget_output = isset($args['before_widget']) ? $args['before_widget'] : '';
         $widget_output .= '<div class="emailoctopus-email-widget">';
 
         if ($form_id !== 0) {
@@ -133,9 +129,9 @@ class Widget extends WP_Widget
         }
 
         $widget_output .= '</div>';
-        $widget_output .= isset($after_widget) ? $after_widget : false;
+        $widget_output .= isset($args['after_widget']) ? $args['after_widget'] : '';
 
-        $cache[$args['widget_id']] = $widget_output;
+        $cache[$widget_id] = $widget_output;
 
         wp_cache_set($this->get_widget_slug(), $cache, 'emailoctopus_widget');
 

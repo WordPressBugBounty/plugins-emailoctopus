@@ -33,6 +33,7 @@ class Gutenberg
         // Form Block.
         add_action('init', [$this, 'register_form_editor_scripts'], 10);
         add_action('init', [$this, 'register_form_block'], 11);
+        add_action('enqueue_block_editor_assets', [$this, 'localize_form_editor_scripts']);
         // Register REST API route for shortcode preview.
         add_action('rest_api_init', [$this, 'preview_shortcode_endpoint']);
     }
@@ -59,17 +60,30 @@ class Gutenberg
      */
     public function register_form_editor_scripts(): void
     {
-        $api_key_valid = true;
-        $forms = [];
-        // Check the API key and retrieve the forms only on edit post / page screen.
-        if (is_admin()) {
-            global $pagenow;
-            if (in_array($pagenow, ['post.php', 'post-new.php', 'widgets.php'], true)) {
-                $api_key = get_option('emailoctopus_api_key', false);
-                $api_key_valid = Utils::is_valid_api_key($api_key);
-                $forms = $this::get_forms();
-            }
+        $block_asset = $this->get_block_asset();
+
+        wp_register_style('emailoctopus-form', Utils::get_plugin_url('public/build/block.css'), [], $block_asset['version']);
+        wp_register_script(
+            'emailoctopus-form',
+            Utils::get_plugin_url('public/build/block.js'),
+            $block_asset['dependencies'],
+            $block_asset['version'],
+            true
+        );
+    }
+
+    /**
+     * Localizes Block Editor script data when the block editor is loading.
+     */
+    public function localize_form_editor_scripts(): void
+    {
+        if (!$this->is_block_editor_screen()) {
+            return;
         }
+
+        $api_key = get_option('emailoctopus_api_key', false);
+        $api_key_valid = Utils::is_valid_api_key($api_key);
+        $forms = $this::get_forms();
 
         $api_connection_required = wp_sprintf(
             /* translators: %1$s - create account button, %2$s - connect account button */
@@ -111,9 +125,57 @@ class Gutenberg
             ],
             'form_url_base' => admin_url('admin.php?page=emailoctopus-form'),
         ];
-        wp_register_style('emailoctopus-form', Utils::get_plugin_url('public/build/block.css'), [], EMAILOCTOPUS_VERSION);
-        wp_register_script('emailoctopus-form', Utils::get_plugin_url('public/build/block.js'), ['wp-blocks', 'wp-element'], EMAILOCTOPUS_VERSION, true);
+
         wp_localize_script('emailoctopus-form', 'emailoctopus_form', $block_data);
+    }
+
+    /**
+     * Returns generated script asset metadata for the main block script.
+     */
+    private function get_block_asset(): array
+    {
+        $asset_file = dirname(__DIR__) . '/public/build/block.asset.php';
+        if (is_readable($asset_file)) {
+            $asset = require $asset_file;
+            if (is_array($asset)) {
+                return [
+                    'dependencies' => isset($asset['dependencies']) && is_array($asset['dependencies']) ? $asset['dependencies'] : [],
+                    'version' => isset($asset['version']) && is_string($asset['version']) ? $asset['version'] : EMAILOCTOPUS_VERSION,
+                ];
+            }
+        }
+
+        return [
+            'dependencies' => ['wp-blocks', 'wp-element'],
+            'version' => EMAILOCTOPUS_VERSION,
+        ];
+    }
+
+    /**
+     * Confirms the current admin context is a block editor screen.
+     */
+    private function is_block_editor_screen(): bool
+    {
+        if (!function_exists('get_current_screen')) {
+            return false;
+        }
+
+        $screen = get_current_screen();
+
+        if (!$screen || !method_exists($screen, 'is_block_editor') || !$screen->is_block_editor()) {
+            return false;
+        }
+
+        $supported_screen_ids = [
+            'site-editor',
+            'post',
+            'page',
+            'widgets',
+        ];
+
+        return in_array($screen->id, $supported_screen_ids, true)
+            || 'post' === $screen->base
+            || 'site-editor' === $screen->base;
     }
 
     /**
@@ -244,7 +306,8 @@ class Gutenberg
         return [
             'js' => $this->is_emailoctopus_shortcode($shortcode) ? do_shortcode($shortcode) : '',
             'html' => '',
-            'style' => '<style>.grecaptcha-badge {display: none!important;}</style>',
+            // Hide reCAPTCHA container
+            'style' => '<style>.emailoctopus-form > div:last-child > div {display: none!important;}</style>',
         ];
     }
 

@@ -27,7 +27,7 @@
 
         clearNotices();
 
-        const api_key = $.trim( $( document.getElementById( 'emailoctopus-api-key-input' ) ).val() );
+        const api_key = ( $( document.getElementById( 'emailoctopus-api-key-input' ) ).val() || '' ).trim();
 
         if ( api_key === '' ) {
             addNotice( 'error', l10n.apiKeyEmpty );
